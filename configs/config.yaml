@@ -1,0 +1,94 @@
+
+wandb_params:
+    notes: testrun
+    entity: goetzkeg #'', #'hzb-aos'
+    project : 'polarix_troubleshoot'
+    name: 'cudatest05'
+    id: 'polarixFrameworkTest05'
+    resume: None #overwrites if id is same
+    force: True #crashes if can not connect
+
+model_params:
+  model_name: "betaVAEV00"
+  model_kwargs:
+    input_dim: [64, 236]
+    train_bool: True
+    beta: 1.0e-4
+    activations: 'mish' #mish or relu, this is still hard coded in the model
+    conv_sizes_encoder: [5, 5, 5]
+    conv_nr_encoder: [1, 8, 16, 32]
+    conv_strides_encoder: 1
+    pooling_kernel_size: [3, 3, 3]
+    pooling_stride: [1, 1, 1]
+    ful_cn_nodes_encoder: [-1, 500, 24]
+    dropout_encoder: -1
+    batch_norm: False
+    optimizer_kwargs:
+      lr : 1.0e-3
+
+
+
+
+## i decided for the sake of simplicity to not include streaking in this datamodule. Use the PolarixDATAEval modul for a proper dataset, that also contains streaking data and the respective calibrations
+datamodule:
+  datamodule_name: polarixV00
+  val_split: 0.05
+  dataset:
+    main_path:  "/asap3/flash/gpfs/fl21/2021/data/11012601/raw/hdf/Aug25/"
+    runnumbers: [39924, 39925, 39926, 39927] #, 39928, 39929, 39930, 39931, 39932, 39933, 39934]
+    data_shape: [64,236] #after preprocessing!
+    len_data: -1
+    max_nr_images : null # mainly for debugging, will only open one file, set to null if you want all images
+    camera_offset: -1
+    charge_index: 476
+    normv : 255. # i do this late, because it saves memory
+    preprocessing: [cut_images, flip, binning, filter_centerable, center]
+    preprocessing_kwargs:
+      cut_images:
+        borders: [0,null,0,null]
+      center: {}
+      filter_centerable:
+        boundaries: [70,170]
+        minv: 50.
+      binning:
+        binning_dims: [10,10]
+      flip:
+        flip_runs: [39925,39926,39929,39930,39934]
+    h5paths:
+      polarix : '/uncategorised/FLASH.DIAG/CAMERA/OTR9FL2XTDS/'
+      gmd: '/FL2/Photon Diagnostic/GMD/Pulse resolved energy/energy tunnel/'
+      charge : '/FL1/Electron Diagnostic/Bunch charge/at gun/'
+  train_loader:
+      batch_size: 48
+      shuffle: True
+      num_workers: 0
+  val_loader:
+      batch_size: 48
+      shuffle : False
+      num_workers: 0
+
+
+## my idea is that they take a part of the dataset if they need images.. maybe i have to define a specific part of the dataset that is stored in mem for this
+callbacks:
+  callbacklist: [checkpoint_time, learning_rate_monitor, reconstruction_plot, latent_space_plot]
+  checkpoint_time:
+    dirpath : '/beegfs/desy/user/goetzkeg/polarix_res/test/checkpoints/'
+    monitor : 'val/loss'
+    mode: 'min'
+    save_last: True
+    save_on_train_epoch_end : True
+  learning_rate_monitor: {}
+  reconstruction_plot:
+    log_every_x_val_step:  1
+  latent_space_plot:
+      log_every_x_val_step: 1
+
+trainer:
+  log_every_n_steps: 50
+  accelerator: cuda
+  max_epochs: 8000
+  deterministic: True
+
+
+
+
