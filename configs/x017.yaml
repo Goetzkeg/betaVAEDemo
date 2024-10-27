@@ -4,7 +4,7 @@ wandb_params:
     entity: hzb-aos #'' #'hzb-aos'
     project : 'polarix'
     name: 'x017'
-    id: '%wandb_params/name%'
+    id: 'x017'
     resume: None #overwrites if id is same
     force: True #crashes if can not connect
 
