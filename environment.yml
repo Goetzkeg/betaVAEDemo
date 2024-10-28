@@ -26,7 +26,7 @@ dependencies:
   - pickleshare=0.7.5=py_1003
   - imageio=2.36.0=pyh12aca89_1
   - ipympl=0.9.4=pyhd8ed1ab_0
-  - scipy=1.14.1=py312h62794b6_1
+  - scipy
   - pytorch=2.5.0=py3.12_cpu_0
   - pytorch-lightning=2.4.0=pyhd8ed1ab_0
   - h5py=3.12.1=nompi_py312hedeef09_102
