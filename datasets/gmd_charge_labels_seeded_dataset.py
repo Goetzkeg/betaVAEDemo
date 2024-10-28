@@ -9,7 +9,6 @@ from torch.utils.data import Dataset
 
 from preprocessing import preprocessing_steps
 from transforms import get_transforms
-from utils.rectangular_masks import RectangularMasks
 
 
 
