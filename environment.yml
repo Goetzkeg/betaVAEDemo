@@ -3,7 +3,6 @@ channels:
   - pytorch
   - conda-forge
   - nodefaults
-  - cpuonly
 dependencies:
   - ipywidgets=8.1.5=pyhd8ed1ab_0
   - ipython=8.29.0=pyh707e725_0
