@@ -1,4 +1,4 @@
-name: visLS_minimal
+name: betaVAEDemo
 channels:
 - pytorch
 - conda-forge
