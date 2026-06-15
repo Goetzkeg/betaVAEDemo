@@ -4,8 +4,7 @@ channels:
   - conda-forge
 dependencies:
   - python=3.11
-  - pytorch::pytorch
-  - pytorch::pytorch-cuda=12.1
+  - pytorch::pytorch::*=*cpu*
   - pytorch::torchvision
   - numpy
   - scipy
@@ -17,8 +16,8 @@ dependencies:
   - voila>=0.5.0
   - jupyter
   - jupyterlab
-  - ipympl
-  - plotly
   - pip
   - pip:
     - pytorch-lightning>=2.0
+    - plotly
+    - ipympl
